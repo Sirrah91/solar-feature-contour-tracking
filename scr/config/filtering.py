@@ -1,9 +1,10 @@
 import numpy as np
-from typing import Literal
+
+from scr.utils.types_alias import ObjectFilteringMode
 
 
 def gimme_filtering_kwargs(
-        mode: Literal["sunspots", "pores", "all_sunspots", "all_pores"]
+        mode: ObjectFilteringMode
 ) -> dict:
     if "all" not in mode:
         # filter out the invalid frames first
@@ -14,7 +15,7 @@ def gimme_filtering_kwargs(
                 "max_value": np.inf,
                 "mode": "frame-wise"
             },
-            "overall_mu_min": {
+            "sunspot_mu_min": {
                 "stats_key": "Ic",
                 "min_value": 0.4,
                 "max_value": 1.0,
@@ -26,16 +27,16 @@ def gimme_filtering_kwargs(
 
     if "sunspots" in mode:
         filtering_kwargs |= {
-            "overall": {
-                "umbra_lifetime": {
+            "Ic<0.5": {
+                "lifetime": {
                     "stats_key": "Ic",
                     "min_value": 30.,
                     "max_value": np.inf,
                     "mode": "all"
                 },
             },
-            "penumbra": {
-                "corrected_area": {
+            "Ic<0.9-Ic<0.5": {
+                "area_corr": {
                     "stats_key": "Ic",
                     "min_value": 5000.,
                     "max_value": np.inf,
@@ -46,28 +47,26 @@ def gimme_filtering_kwargs(
 
     elif "pores" in mode:
         filtering_kwargs |= {
-            "overall": {
-                "umbra_lifetime": {
+            "Ic<0.5": {
+                "lifetime": {
                     "stats_key": "Ic",
                     "min_value": 8.,
                     "max_value": np.inf,
                     "mode": "all"
                 },
-            },
-            "penumbra": {
-                "corrected_area": {
-                    "stats_key": "Ic",
-                    "min_value": 0.,
-                    "max_value": 1000.,
-                    "mode": "all"
-                },
-            },
-            "umbra": {
-                "corrected_area": {
+                "area_corr": {
                     "stats_key": "Ic",
                     "min_value": 100.,
                     "max_value": np.inf,
                     "mode": "any"
+                },
+            },
+            "Ic<0.9-Ic<0.5": {
+                "area_corr": {
+                    "stats_key": "Ic",
+                    "min_value": 0.,
+                    "max_value": 1000.,
+                    "mode": "all"
                 },
             },
         }
