@@ -37,7 +37,7 @@ def get_parser(
                 "  python run_calc_stats.py "
                 "--sunspot_input_path /path/to/sunspots/sunspot_file.npz "
                 "--quantities Ic "
-                "--stat_types sunspots"),
+            ),
             formatter_class=CustomFormatter
         )
 

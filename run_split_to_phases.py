@@ -39,7 +39,7 @@ def get_parser(
                 "Split track contours to evolutionary phases.\n\n"
                 "Example:\n"
                 "  python run_split_to_phases.py "
-                "--stats_dir /path/to/sunspots"
+                "--stats_dir /path/to/sunspots_stats"
             ),
             formatter_class=CustomFormatter
         )
@@ -54,7 +54,7 @@ def get_parser(
         type=str,
         required=True,
         nargs=1,
-        help="Directory containing input contour files."
+        help="Directory containing tracked sunspots with statistics (.npz files)."
     )
 
     # Slope options
