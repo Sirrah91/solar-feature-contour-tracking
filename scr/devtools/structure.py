@@ -11,6 +11,8 @@ def get_project_structure(
     Nested functions are prefixed with '>'.
     """
 
+    EXCLUDED_DIRS = ["log", "OpenPBS", "graphic_output", ".idea", "python_compiled", "__pycache__", "tests"]
+
     def extract_functions_from_file(file_path: str) -> list[str]:
         """Return a list of function names in the Python file, marking nested functions."""
         function_names: list[str] = []
@@ -39,7 +41,7 @@ def get_project_structure(
     def build_structure(path: str) -> dict:
         structure = {}
         for entry in os.scandir(path):
-            if entry.is_dir():
+            if entry.is_dir() and entry.name not in EXCLUDED_DIRS:
                 structure[entry.name] = build_structure(entry.path)
             elif entry.is_file() and entry.name.endswith(".py"):
                 structure[entry.name] = extract_functions_from_file(entry.path)
@@ -51,4 +53,4 @@ def get_project_structure(
 if __name__ == "__main__":
     from pprint import pprint
 
-    pprint(get_project_structure("./scr"))
+    pprint(get_project_structure("./"))

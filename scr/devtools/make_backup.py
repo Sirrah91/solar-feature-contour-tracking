@@ -16,7 +16,7 @@ def make_backup(version: str) -> None:
 
     # directories in _project_dir
     dirs_to_save_specific = {
-        "./": ["*.py", "*.in", "*.txt", "*.sh"]
+        "./": ["*.py", "*.in", "*.toml", "*.txt", "*.sh"]
     }
 
     # directories in _project_dir

@@ -10,6 +10,16 @@ class CustomArgumentParser(
         self.print_usage(sys.stderr)
         self.exit(2, f"{self.prog}: error: {message}\nUse 'python {self.prog} --help' to see available options.\n")
 
+    def safe_add_argument(self, group, *args, **kwargs):
+        """
+        Adds an argument to a specific group ONLY if it doesn't exist
+        in the global parser yet.
+        """
+        # Check if any of the flags (e.g., '-o', '--outdir') already exist
+        if not any(flag in self._option_string_actions for flag in args):
+            return group.add_argument(*args, **kwargs)
+        return None  # Skip if already exists
+
 
 class CustomFormatter(
     argparse.ArgumentDefaultsHelpFormatter,
