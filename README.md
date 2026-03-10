@@ -99,7 +99,14 @@ Run contour tracking via the main pipeline script:
 
 
 ```bash
-python run_contour_tracking.py --data_dir /path/to/fits --contour_quantity Ic --penumbra_threshold 0.9 --umbra_threshold 0.5 --pore_threshold 0.65
+python run_contour_tracking.py --data_dir /path/to/fits --contour_quantity Ic --contour_level 0.9
+```
+
+Associate the tracks with their inner structure:
+
+
+```bash
+python run_sunspot_association.py --track_input_path /path/to/tracks/track_file.npz --inner_contour_quantity Ic --component 0.65 --component 0.5
 ```
 
 
@@ -107,7 +114,7 @@ Compute statistics:
 
 
 ```bash
-python run_calc_stats.py --contour_file /path/to/contours/contour_file.npz --quantities Ic --stat_types sunspots
+python run_calc_stats.py --sunspot_input_path /path/to/sunspots/sunspot_file.npz --quantities B Bhor Br
 ```
 
 
@@ -115,7 +122,7 @@ Segment the temporal evolution into distinct phases
 
 
 ```bash
-python run_split_to_phases.py --contour_dirname /path/to/contours --mode sunspots
+python run_split_to_phases.py --stats_dir /path/to/sunspots_stats
 ```
 
 
