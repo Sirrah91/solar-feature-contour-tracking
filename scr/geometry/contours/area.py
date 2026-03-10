@@ -6,7 +6,6 @@ from scr.utils.filesystem import is_empty
 
 def contour_signed_area(
         contour: Contour,
-        correction: np.ndarray | float = 1.
 ) -> float:
     """
     Compute the signed area of a contour with optional per-point correction.
@@ -15,8 +14,6 @@ def contour_signed_area(
     ----------
     contour : (N,2) array
         Ordered coordinates (row=y, col=x).
-    correction : float or (N,) array
-        Correction factor for each point. If array, per-point corrections are averaged per segment.
 
     Returns
     -------
@@ -26,20 +23,20 @@ def contour_signed_area(
 
     x, y = contour[:, 1], contour[:, 0]
 
-    if not np.isscalar(correction):
-        correction = 0.5 * (correction + np.roll(correction, -1))  # average per segment
+    # To avoid overflow
+    x, y = x.astype(float), y.astype(float)
+    x -= x.mean()
+    y -= y.mean()
 
     # shoelace formula with correction applied per segment
-    area = 0.5 * np.nansum(correction * (x * np.roll(y, 1) - y * np.roll(x, 1)))
-
+    area = 0.5 * (np.dot(x, np.roll(y, shift=1)) - np.dot(y, np.roll(x, shift=1)))
     return area
 
 
 def contour_area(
         contour: Contour,
-        correction: np.ndarray | float = 1.
 ) -> float:
-    return np.abs(contour_signed_area(contour, correction))
+    return np.abs(contour_signed_area(contour))
 
 
 def total_contours_area(

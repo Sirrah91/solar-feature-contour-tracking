@@ -5,20 +5,20 @@ from scr.utils.types_alias import Contour
 
 def densify_contour(
         contour: Contour,
-        min_step: float = 0.5
+        max_vertex_spacing: float = 0.5
 ) -> Contour:
     """
     Densify a polyline without changing existing vertices.
 
     For each segment between contour[i] and contour[i+1], if the Euclidean
-    distance is > min_step, insert extra points so that all sub-steps
-    are <= min_step.
+    distance is > max_vertex_spacing, insert extra points so that all sub-steps
+    are <= max_vertex_spacing.
 
     Parameters
     ----------
     contour : (N, 2) array
         Polyline vertices (y, x) or (x, y).
-    min_step : float
+    max_vertex_spacing : float
         Maximum allowed spacing between points.
 
     Returns
@@ -32,13 +32,13 @@ def densify_contour(
         seg = p1 - p0
         dist = np.hypot(seg[0], seg[1])
 
-        if dist <= min_step:
+        if dist <= max_vertex_spacing:
             # no densification needed
             new_points.append(p1)
             continue
 
-        # number of intervals; +1 ensures spacing <= min_step
-        n_intervals = int(np.ceil(dist / min_step))
+        # number of intervals; +1 ensures spacing <= max_vertex_spacing
+        n_intervals = int(np.ceil(dist / max_vertex_spacing))
 
         # generate points including both endpoints
         dense_seg = np.linspace(p0, p1, n_intervals + 1)

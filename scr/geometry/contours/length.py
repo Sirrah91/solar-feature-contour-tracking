@@ -4,30 +4,32 @@ from scr.utils.types_alias import Contour, Contours
 
 
 def contour_length(
-        contour: Contour,
-        correction: np.ndarray | float = 1.
+        contour: Contour
 ) -> float:
     """
-    Compute length of a contour with optional per-point correction.
+    Compute the length of a 2D contour.
 
     Parameters
     ----------
     contour : (N,2) array
         Coordinates of the contour points (x,y or col,row)
-    correction : float or (N,) array
-        Multiplicative correction. If array, should be per-point. Each segment weight
-        is taken as the average of the weights at the segment endpoints.
 
     Returns
     -------
     float
         Corrected contour length
     """
-    if not np.isscalar(correction):
-        correction = np.asarray(correction)
-        correction = 0.5 * (correction[:-1] + correction[1:])
 
-    return np.nansum(np.sqrt(np.nansum(np.diff(contour, axis=0) ** 2, axis=1)) * correction)
+    diffs = np.diff(contour, axis=0)
+    seg_lengths = np.hypot(diffs[:, 0], diffs[:, 1])
+    length = np.nansum(seg_lengths)
+
+    if np.all(contour[0] == contour[-1]):  # closed curve
+        # Add last segment from last point to first
+        last_seg = np.hypot(*(contour[0] - contour[-1]))
+        length += last_seg
+
+    return length
 
 
 def total_contours_length(

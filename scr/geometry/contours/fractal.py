@@ -1,6 +1,7 @@
 import numpy as np
 
-from scr.utils.types_alias import Mask
+from scr.utils.types_alias import Contour, Mask
+from scr.utils.filesystem import is_empty
 
 
 def fractal_dimension_mask(
@@ -96,9 +97,85 @@ def fractal_dimension_mask(
             logs_N=logs_N,
             logs_N_fit=logs_N_fit,
             fractal_dim=D,
-            outfile=path.join(fig_outdir, "box_counting.jpg")
+            outfile=path.join(fig_outdir, "box_counting.jpg"),
+            use_tex=False,
         )
 
     return D
 
 
+def fractal_dimension_contour(
+        contour: Contour,
+        n_scales: int = 10,
+        control_plot: bool = False
+) -> float:
+    """
+    Box-counting fractal dimension computed directly
+    from a contour (Nx2 arrays).
+    """
+
+    if is_empty(contour) or len(contour) < 2:
+        return float("nan")
+
+    x = contour[:, 0]
+    y = contour[:, 1]
+
+    xmin, xmax = x.min(), x.max()
+    ymin, ymax = y.min(), y.max()
+
+    L = max(xmax - xmin, ymax - ymin)
+
+    if L == 0:
+        return float("nan")
+
+    # scales from large to small
+    scales = np.logspace(
+        np.log10(L / 2),
+        np.log10(L / 100),
+        n_scales
+    )
+
+    counts = []
+    eps_values = []
+
+    for eps in scales:
+        ix = np.floor((x - xmin) / eps).astype(int)
+        iy = np.floor((y - ymin) / eps).astype(int)
+
+        boxes = np.stack((ix, iy), axis=1)
+
+        n_boxes = len(np.unique(boxes, axis=0))
+
+        if n_boxes > 0:
+            counts.append(n_boxes)
+            eps_values.append(eps)
+
+    if len(counts) < 2:
+        return float("nan")
+
+    logs_eps = np.log(1.0 / np.array(eps_values))
+    logs_N = np.log(np.array(counts))
+
+    coeffs = np.polyfit(logs_eps, logs_N, 1)
+    logs_N_fit = np.polyval(coeffs, logs_eps)
+
+    D = float(coeffs[0])
+
+    if control_plot:
+        from os import path
+        from scr.config.paths import PATH_FIGURES
+        from scr.utils.filesystem import check_dir
+        from scr.geometry.contours.control_plots import plot_fractal_dimension_control
+
+        fig_outdir = path.join(PATH_FIGURES, "fractal_dimension")
+        check_dir(fig_outdir)
+
+        plot_fractal_dimension_control(
+            logs_eps=logs_eps,
+            logs_N=logs_N,
+            logs_N_fit=logs_N_fit,
+            fractal_dim=D,
+            outfile=path.join(fig_outdir, "box_counting.jpg")
+        )
+
+    return D

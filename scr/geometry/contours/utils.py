@@ -1,10 +1,7 @@
 import numpy as np
-from shapely.geometry import Polygon, Point, LineString
 
-from scr.utils.types_alias import Contour, Contours
-from scr.utils.filesystem import is_empty
-
-from scr.geometry.contours.normalization import close_contour
+from scr.geometry.contours.shapes import do_contours_intersects
+from scr.utils.types_alias import Contours
 
 
 def get_intersecting_pairs(
@@ -51,45 +48,3 @@ def group_by_first_index(
     ]
     filtered_values1 = list(np.array(values1, dtype=object)[unique_i1])
     return filtered_values1, grouped_values2, index_pairs[first_idx]
-
-
-def contour_to_shape(
-        contour: Contour,
-        holes: Contours | None = None,
-        close: bool = True
-) -> Polygon | LineString | Point:
-    """
-    Convert a contour and optional holes into a shapely shape.
-
-    Parameters:
-        contour: Nx2 array of (y, x) coordinates for the outer boundary.
-        holes: Optional list of Nx2 arrays defining holes.
-        close: If True, ensure contours are closed polygons.
-
-    Returns:
-        Shapely geometry (Polygon, LineString, or Point).
-    """
-    if close:
-        contour = close_contour(contour)
-        holes = [close_contour(h) for h in holes] if not is_empty(holes) else []
-
-    if len(contour) == 1:
-        return Point(contour[0])
-    if len(contour) < 3:
-        return LineString(contour)
-
-    try:
-        poly = Polygon(shell=contour, holes=holes)
-        return poly if poly.is_valid else poly.buffer(0)
-    except Exception:
-        return Polygon(contour).convex_hull
-
-
-def do_contours_intersects(
-        contour1: Contour,
-        contour2: Contour
-) -> bool:
-    """
-    Return True if two contours intersect.
-    """
-    return contour_to_shape(contour1).intersects(contour_to_shape(contour2))
