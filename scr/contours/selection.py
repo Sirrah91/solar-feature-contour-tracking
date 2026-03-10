@@ -7,8 +7,8 @@ from scr.geometry.contours.area import contour_area
 from scr.geometry.contours.extraction import find_contours
 from scr.geometry.contours.distance import contours_distance
 from scr.geometry.contours.normalization import normalize_contour_input
-from scr.geometry.contours.utils import contour_to_shape
-from scr.geometry.raster.mask import contours_to_mask
+from scr.geometry.contours.shapes import contour_to_shape
+from scr.geometry.raster.binary import contours_to_binary_mask
 
 from scr.morphology.binary import expand_mask
 
@@ -80,7 +80,7 @@ def select_best_contour(
 
     for idx, cnt in enumerate(candidates):
         cnt = np.reshape(cnt, (-1, 2))
-        mask = contours_to_mask(
+        mask = contours_to_binary_mask(
             contours=normalize_contour_input(cnt),
             shape=erosion_image_shape
         )
