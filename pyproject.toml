@@ -1,0 +1,32 @@
+[project]
+name = "Contours"
+version = "2.0.0"
+description = "Auto-generated from nested source scan"
+authors = [
+    { name = "David Korda", email = "david.korda@asu.cas.cz" }
+]
+license = "MIT"
+requires-python = ">=3.9, <3.14"
+dependencies = [
+    "PyInstaller",
+    "astropy",
+    "ipython",
+    "matplotlib",
+    "numpy",
+    "opencv-python",
+    "pandas",
+    "plotly",
+    "pwlf",
+    "pyarrow",
+    "pycairo",
+    "scikit-image",
+    "scipy",
+    "shapely",
+    "sunpy",
+    "tqdm",
+    "traitlets",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
