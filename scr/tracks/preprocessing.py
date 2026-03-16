@@ -83,7 +83,7 @@ def preprocess_tracks(
             tracks,
             mode="covers",
             min_containment=min_containment,
-            min_overlap_frames=2,
+            min_overlap_frames=filtering.get("min_frames", 1),
             min_nesting_fraction=0.5,
         )
 

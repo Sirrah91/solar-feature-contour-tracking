@@ -153,8 +153,8 @@ def compute_track_nesting(
         *,
         mode: AssociationMode = "covers",
         min_containment: float = 0.8,
-        min_overlap_frames: int = 1,
-        min_nesting_fraction: float = 0.4,
+        min_overlap_frames: int = 3,
+        min_nesting_fraction: float = 0.5,
 ) -> dict[TrackID, TrackID]:
     nesting_counts = nested_defaultdict(factory=int)
     overlap_counts = nested_defaultdict(factory=int)
@@ -236,8 +236,8 @@ def collapse_nested_tracks(
         *,
         mode: AssociationMode = "covers",
         min_containment: float = 0.8,
-        min_overlap_frames: int = 1,
-        min_nesting_fraction: float = 0.4,
+        min_overlap_frames: int = 3,
+        min_nesting_fraction: float = 0.5,
 ) -> tuple[Tracks, dict[TrackID, TrackID]]:
     nesting = compute_track_nesting(
         tracks,
