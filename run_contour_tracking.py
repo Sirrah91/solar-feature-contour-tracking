@@ -88,7 +88,7 @@ def get_parser(
     filtering.add_argument(
         "--min_area",
         type=float,
-        default=5.0,
+        default=3.0,
         nargs=1,
         help="Minimum contour area in pixels² for contours to be considered."
     )

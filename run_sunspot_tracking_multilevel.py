@@ -123,6 +123,30 @@ def get_parser(
         help="Remove nested frames from outer tracks.",
     )
 
+    filtering.add_argument(
+        "--min_vertices",
+        type=int,
+        default=4,
+        help="Minimum number of vertices a contour must have to be kept. "
+             "Contours with fewer points are discarded.",
+    )
+    filtering.add_argument(
+        "--max_healing_gap",
+        type=float,
+        default=0.0,
+        help="Maximum distance (in pixels) between first and last contour point "
+             "to automatically 'snap' them together if the contour is almost closed. "
+             "Set >0 to heal minor numerical gaps.",
+    )
+    filtering.add_argument(
+        "--max_closing_gap",
+        type=float,
+        default=0.0,
+        help="Maximum distance (in pixels) between first and last contour point "
+             "to forcibly close the contour by appending the first point. "
+             "Use this for incomplete contours.",
+    )
+
     # Morphology and contour merging
     morph = parser.add_argument_group("morphology and merging")
     morph.add_argument(
@@ -239,6 +263,9 @@ def run_chain(args: argparse.Namespace) -> str:
         "min_frames": args.min_frames,
         "collapse_nested": args.collapse_nested,
         "remove_nested": args.remove_nested,
+        "min_vertices": args.min_vertices,
+        "max_healing_gap": args.max_healing_gap,
+        "max_closing_gap": args.max_closing_gap,
     }
     args.filtering = filtering_cfg
 
