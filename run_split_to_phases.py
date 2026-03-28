@@ -71,6 +71,11 @@ def get_parser(
         action="store_true",
         help="Flag to trigger new slope computation."
     )
+    slope_opts.add_argument(
+        "--collect_control_plots",
+        action="store_true",
+        help="Draw and save the slope control plots."
+    )
 
     # Output options
     output = parser.add_argument_group("output options")
@@ -120,6 +125,7 @@ def run_chain(args: argparse.Namespace) -> tuple[str, str]:
         stats_paths=sorted(glob(path.join(args.stats_dir, "*.npz"))),
         slope_path=path.join(args.phases_outdir, args.slope_filename),
         collect_new_slopes=args.collect_new_slopes,
+        collect_control_plots=args.collect_control_plots,
     )
 
     # 3. Saving
