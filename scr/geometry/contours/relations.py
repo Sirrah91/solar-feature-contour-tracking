@@ -1,6 +1,6 @@
+from shapely.geometry import Polygon, MultiPolygon
 from shapely.geometry.base import BaseGeometry
 from shapely.prepared import PreparedGeometry
-from shapely import Polygon, MultiPolygon
 
 from scr.utils.types_alias import AssociationMode
 from scr.geometry.contours.shapes import prepare_shape
@@ -14,33 +14,19 @@ def contour_belongs_to_outer(
         min_fraction: float = 0.8,
 ) -> bool:
     """
-    Decide whether `inner` contour belongs to `outer`.
+    Strict and robust containment test.
 
-    Philosophy
-    ----------
-    - Topology-aware (holes, rings)
-    - Robust to thin / degenerate shapes
-    - Cheap tests first, expensive last
+    Guarantees:
+    - No symmetric false positives (A in B and B in A)
+    - Robust to holes, rings, thin geometries
+    - No reliance on unstable heuristics
 
-    Decision pipeline
-    -----------------
-    REJECT:
-        1. Empty geometry
-        2. Bounding-box disjoint
-
-    ACCEPT (cheap & robust):
-        3. Exact predicate (covers / contains)
-        4. Representative point inside
-        5. Exterior (shell) inside
-
-    REFINE (expensive):
-        6. Intersection existence
-        7. Boundary overlap fraction
-        8. Area overlap fraction (final fallback)
+    Interpretation:
+    - "inner belongs to outer" ⇔ majority of inner lies inside outer
     """
 
     # ============================================================
-    # 0. Normalisation & preparation
+    # 0. Normalisation
     # ============================================================
 
     if inner.is_empty:
@@ -59,7 +45,20 @@ def contour_belongs_to_outer(
         return False
 
     # ============================================================
-    # 1. Fast rejection (bounding boxes)
+    # 1. Enforce directionality (CRITICAL)
+    # ============================================================
+
+    inner_area = inner.area
+    outer_area = outer_geom.area
+
+    if inner_area == 0:
+        return False
+
+    if inner_area > outer_area:
+        return False
+
+    # ============================================================
+    # 2. Bounding-box rejection (safe)
     # ============================================================
 
     minxi, minyi, maxxi, maxyi = inner.bounds
@@ -69,7 +68,7 @@ def contour_belongs_to_outer(
         return False
 
     # ============================================================
-    # 2. Exact predicate
+    # 3. Exact predicate (fast + reliable)
     # ============================================================
 
     if mode == "strict":
@@ -82,32 +81,29 @@ def contour_belongs_to_outer(
         raise ValueError(f"Unknown containment mode: {mode}")
 
     # ============================================================
-    # 3. Topology-aware cheap acceptance
-    # ============================================================
-
-    # 3a. Representative point (hole-safe)
-    rp = inner.representative_point()
-    if outer_prep.covers(rp):
-        return True
-
-    # 3b. Exterior shells (ring-safe)
-    if isinstance(inner, Polygon):
-        if outer_prep.covers(inner.exterior):
-            return True
-
-    elif isinstance(inner, MultiPolygon):
-        if all(outer_prep.covers(p.exterior) for p in inner.geoms):
-            return True
-
-    # ============================================================
-    # 4. Intersection existence (cheap-ish rejection)
+    # 4. Must intersect (reject otherwise)
     # ============================================================
 
     if not outer_prep.intersects(inner):
         return False
 
     # ============================================================
-    # 5. Boundary-based refinement (thin-shape robust)
+    # 5. Exterior (shell) test  hole-safe
+    # ============================================================
+
+    if isinstance(inner, Polygon):
+        if outer_prep.covers(inner.exterior):
+            return True
+
+    elif isinstance(inner, MultiPolygon):
+        for p in inner.geoms:
+            if not outer_prep.covers(p.exterior):
+                break
+        else:
+            return True
+
+    # ============================================================
+    # 6. Boundary overlap (robust for thin shapes)
     # ============================================================
 
     boundary = inner.boundary
@@ -120,16 +116,12 @@ def contour_belongs_to_outer(
                 return True
 
     # ============================================================
-    # 6. Area-based fallback (last resort)
+    # 7. Area dominance (FINAL DECISION)
     # ============================================================
 
-    area = inner.area
-    if area == 0:
+    inter = outer_geom.intersection(inner)
+
+    if inter.is_empty:
         return False
 
-    inter_area = outer_geom.intersection(inner)
-
-    if inter_area.is_empty:
-        return False
-
-    return (inter_area.area / area) >= min_fraction
+    return (inter.area / inner_area) >= min_fraction
