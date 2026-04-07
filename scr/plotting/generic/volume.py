@@ -1,4 +1,5 @@
 import numpy as np
+from math import comb
 import plotly.graph_objects as go
 
 from scr.plotting.utils import merge_explicit_kwargs
@@ -53,7 +54,7 @@ def plot_volume_3d(
 
             # Slice the 3D grids to get 2D planes for the other two dimensions
             # takes a slice at index 0 along the marginalized axis
-            s = [slice(None)] * 3
+            s = [slice(None)] * comb(len(projections), 2)
             s[axis_idx] = 0
 
             # Create surface kwargs
