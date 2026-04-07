@@ -106,7 +106,7 @@ def contour_belongs_to_outer(
     boundary = inner.boundary
     blen = boundary.length
 
-    if blen > 0:
+    if blen > 0.0:
         inter_boundary = outer_geom.intersection(boundary)
         if not inter_boundary.is_empty:
             if inter_boundary.length / blen >= min_fraction:
@@ -116,9 +116,10 @@ def contour_belongs_to_outer(
     # 7. Area dominance (FINAL DECISION)
     # ============================================================
 
-    inter = outer_geom.intersection(inner)
+    if inner_area > 0.0:
+        inter = outer_geom.intersection(inner)
+        if not inter.is_empty:
+            if inter.area / inner_area >= min_fraction:
+                return True
 
-    if inter.is_empty or inner_area == 0.0:
-        return False
-
-    return (inter.area / inner_area) >= min_fraction
+    return False
