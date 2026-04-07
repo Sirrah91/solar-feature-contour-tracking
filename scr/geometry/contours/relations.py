@@ -51,9 +51,6 @@ def contour_belongs_to_outer(
     inner_area = inner.area
     outer_area = outer_geom.area
 
-    if inner_area == 0:
-        return False
-
     if inner_area > outer_area:
         return False
 
@@ -121,7 +118,7 @@ def contour_belongs_to_outer(
 
     inter = outer_geom.intersection(inner)
 
-    if inter.is_empty:
+    if inter.is_empty or inner_area == 0.0:
         return False
 
     return (inter.area / inner_area) >= min_fraction
