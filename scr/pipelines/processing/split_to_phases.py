@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from os import path
+from tqdm import tqdm
 
 from scr.config.paths import SLOPES_BASENAME
 from scr.config.numerics import WP
@@ -35,9 +36,7 @@ def compute_phase_split(
 
         segments_list = []
 
-        for stats_path in stats_paths:
-            print(stats_path)
-
+        for stats_path in tqdm(stats_paths, desc="Fitting slopes", unit="file"):
             sunspots, stats, metadata, events = load_sunspot_file(stats_path)
 
             if is_empty(stats):
