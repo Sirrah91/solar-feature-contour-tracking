@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from os import path
-from tqdm import tqdm
 
 from scr.config.numerics import WP
 
@@ -158,7 +157,7 @@ def collect_slopes(
     # ----------------------------------------------------------
     start = 0
 
-    for i in tqdm(range(1, n), desc="Fitting slopes", unit="rows"):
+    for i in range(1, n):
         if spot_ids[i] != spot_ids[start]:
             process_slice(start, i)
             start = i
