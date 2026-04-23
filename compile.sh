@@ -15,14 +15,13 @@ mkdir -p "${dist_dir}"
 
 # --- List of Python scripts to compile ---
 scripts=(\
-    #"job_sizes.py" \
-    #"run_image_to_stats.py" \
-    #"run_split_to_phases.py" \
-    #"run_contour_tracking.py" \
-    #"run_sunspot_association.py" \
-    #"run_sunspot_tracking_multilevel.py" \
-    #"run_calc_stats.py" \
-    "Bhor_prepare_data_plot_3d.py" \
+    "job_sizes.py" \
+    "run_image_to_stats.py" \
+    "run_split_to_phases.py" \
+    "run_contour_tracking.py" \
+    "run_sunspot_association.py" \
+    "run_sunspot_tracking_multilevel.py" \
+    "run_calc_stats.py" \
     )
 
 cd "${src_dir}" || exit 1
