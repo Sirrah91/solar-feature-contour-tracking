@@ -25,7 +25,7 @@ def surface(
     Returns
     -------
     mask : ndarray
-        Float mask in [-1, 1].
+        Float mask in [-len(contours), +len(contours)].
     """
     total = np.zeros(shape, dtype=float)
 
@@ -76,4 +76,4 @@ def border(
     if thin_border:
         mask = thin(mask)
 
-    return mask.astype(dtype)
+    return np.clip(mask, 0.0, 1.0).astype(dtype)
