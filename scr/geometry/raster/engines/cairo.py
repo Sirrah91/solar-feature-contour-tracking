@@ -98,7 +98,7 @@ def surface(
     Returns
     -------
     mask : ndarray
-        Float mask in [-1, 1].
+        Float mask in [-len(contours), +len(contours)].
     """
     surf, ctx = _create_surface(shape)
 
@@ -173,4 +173,4 @@ def border(
 
     buf = _get_buffer_view(surf, shape)
 
-    return (buf.astype(float) / 255.0).astype(dtype)
+    return np.clip(buf.astype(float) / 255.0, 0.0, 1.0).astype(dtype)
