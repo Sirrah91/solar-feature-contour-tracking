@@ -12,7 +12,7 @@ def is_ccw(
 
 def ensure_ccw(contour: Contour) -> Contour:
     """Ensure contour is oriented counter-clockwise."""
-    if contour_signed_area(contour) < 0:
+    if not is_ccw(contour):
         return contour[::-1]
     return contour
 
