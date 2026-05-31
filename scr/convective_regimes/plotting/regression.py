@@ -120,7 +120,7 @@ def plot_regression(
             estimate = getattr(thresholds, attr)
 
             title = f"{object_type.title()} at {_TITLES[region]}"
-            print(f"{title} ({phase}): {estimate.mean:.0f} ± {estimate.std:.0f} G")
+            print(f"{title} ({phase}): B{cfg.baseline} = {estimate.mean:.0f} ± {estimate.std:.0f} G")
 
             with font_style(fontsize=16):
                 fig, ax = plt.subplots(figsize=(8, 6))
@@ -202,6 +202,8 @@ def plot_regression(
                         loss_ver=results["loss_ver"].to_numpy(),
                         loss_hor=results["loss_hor"].to_numpy(),
                     )
+
+                    print(f"{title} ({phase}): Binc = {transition.start_deg:.1f} - {transition.end_deg:.1f} deg")
 
                     ax.axvspan(
                         transition.start_deg, transition.end_deg,
