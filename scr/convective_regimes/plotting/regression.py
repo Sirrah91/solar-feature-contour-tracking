@@ -120,7 +120,7 @@ def plot_regression(
             estimate = getattr(thresholds, attr)
 
             title = f"{object_type.title()} at {_TITLES[region]}"
-            print(f"{title} ({phase}): {estimate.mean} ± {estimate.std:.0f} G")
+            print(f"{title} ({phase}): {estimate.mean:.0f} ± {estimate.std:.0f} G")
 
             with font_style(fontsize=16):
                 fig, ax = plt.subplots(figsize=(8, 6))
