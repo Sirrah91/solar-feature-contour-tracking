@@ -43,8 +43,8 @@ _TITLES = {
     "UP": r"$I^\mathrm{{c}} = 0.5\,I^\mathrm{{c}}_\mathrm{{QS}}$",
 }
 
-# Maps (object_type, suf, component) → attribute name on RegressionThresholds
-_THRESHOLD_ATTR: dict[tuple[str, str, str], str] = {
+# Maps (object_type, region, component) → attribute name on RegressionThresholds
+_THRESHOLD_ATTR: dict[tuple[FilterMode, str, str], str] = {
     ("sunspots", "PQ", "hor"): "sunspot_pq_bhor",
     ("sunspots", "PQ", "ver"): "sunspot_pq_bver",
     ("sunspots", "UP", "ver"): "sunspot_up_bver",
