@@ -9,7 +9,7 @@ from matplotlib.ticker import FuncFormatter
 
 from scr.config.figures import CBAR_KWARGS, SAVEFIG_KWARGS
 from scr.config.filtering import gimme_filtering_kwargs
-from scr.config.quantities import _QUANTITIES
+from scr.config.quantities import get_measurement_spec
 from scr.convective_regimes.core.regions import (
     SUNSPOT_PQ_B_THRESHOLD,
     TRANSITION_GAMMA_MIN,
@@ -103,7 +103,11 @@ def plot_2d_histograms(
 
     xlim = (0.0, 1.3)
 
+    spec_ic = get_measurement_spec("Ic")
+
     for q in ("B", "Br", "Bhor", "Binc"):
+        spec_q = get_measurement_spec(q)
+
         y_s = extract_q(data_sunspots, q)
         y_p = extract_q(data_pores, q)
         ylim = (0.0, 3000.0) if q != "Binc" else (0.0, 90.0)
@@ -141,12 +145,8 @@ def plot_2d_histograms(
             )
 
             ax.set_title("Sunspots and pores contours")
-            ax.set_xlabel(_QUANTITIES["Ic"].latex)
-            try:
-                Q = _QUANTITIES[q]
-                ax.set_ylabel(f"{Q.latex} ({Q.unit})")
-            except KeyError:
-                ax.set_ylabel(rf"$\gamma$ (deg)")
+            ax.set_xlabel(spec_ic.label())
+            ax.set_ylabel(spec_q.label())
 
             ax.set_xlim(xlim)
             ax.set_ylim(ylim)
@@ -219,6 +219,8 @@ def plot_1d_histograms(
         for reg in regions
     ]
 
+    spec_Bhor = get_measurement_spec("Bhor")
+
     with font_style(fontsize=16):
         fig, axes = plt.subplots(1, 3, sharex=True, sharey=True, figsize=(19, 6))
 
@@ -231,7 +233,7 @@ def plot_1d_histograms(
             )
             ax.legend(loc="upper right")
             ax.set_title(region_label)
-            ax.set_xlabel(r"$B_{\mathrm{hor}} \, \left( \mathrm{G} \right)$")
+            ax.set_xlabel(spec_Bhor.label())
             ax.set_xlim((300, 1700))
 
         axes[0].set_ylabel(r"$\mathrm{PDF} \, \left( \% \right)$")

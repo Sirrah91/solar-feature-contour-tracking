@@ -108,8 +108,8 @@ def main():
             line_kwargs={"marker": "o", "color": "black", "linestyle": "solid", "label": "PWLF"},
         )
 
-        ax.set_xlabel("Phase duration (h)")
-        ax.set_ylabel(spec.ylabel_mean)
+        ax.set_xlabel(r"Phase duration\,(h)")
+        ax.set_ylabel(spec.label_mean())
         ax.legend()
 
         plt.tight_layout()

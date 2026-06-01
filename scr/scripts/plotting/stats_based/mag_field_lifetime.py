@@ -64,8 +64,8 @@ def main():
             mean_values,
         )
 
-        ax.set_xlabel("Lifetime (h)")
-        ax.set_ylabel(spec.ylabel_mean)
+        ax.set_xlabel(r"Lifetime\,(h)")
+        ax.set_ylabel(spec.label_mean())
 
         plt.tight_layout()
 

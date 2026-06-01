@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import PowerNorm
 
 from scr.config.figures import CBAR_KWARGS, SAVEFIG_KWARGS
+from scr.config.quantities import get_measurement_spec
 from scr.convective_regimes.core.regions import SUNSPOT_PQ_B_THRESHOLD
 from scr.convective_regimes.core.thresholds import RegressionThresholds, compute_thresholds
 from scr.convective_regimes.io.loaders import load_probability_map
@@ -80,6 +81,11 @@ def plot_probability_counts(
     thresholds = compute_thresholds(phase, data_dir)
     contour_levels = _build_contour_levels(thresholds)
 
+    spec_Bhor = get_measurement_spec("Bhor")
+    spec_Bver = get_measurement_spec("Bver")
+    spec_B = get_measurement_spec("B")
+    spec_Binc = get_measurement_spec("Binc")
+
     for use_counts in (True, False):
         for object_type in ("sunspots", "pores"):
             filename = probability_filename(
@@ -137,7 +143,7 @@ def plot_probability_counts(
                     h, _ = cs.legend_elements()
                     legend_handles += h
                     legend_labels.append(
-                        rf"$B = {spec.level:.0f}\,\mathrm{{G}}$"
+                        rf"${spec_B.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_B.quantity.unit}}}$"
                     )
 
                 for spec in cfg["Bver"]:
@@ -147,7 +153,7 @@ def plot_probability_counts(
                     h, _ = cs.legend_elements()
                     legend_handles += h
                     legend_labels.append(
-                        rf"$B_{{\mathrm{{ver}}}} = {spec.level:.0f}\,\mathrm{{G}}$"
+                        rf"${spec_Bver.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_Bver.quantity.unit}}}$"
                     )
 
                 for spec in cfg["Bhor"]:
@@ -155,11 +161,11 @@ def plot_probability_counts(
                                    linestyle=spec.linestyle, linewidth=spec.linewidth)
                     legend_handles.append(h)
                     legend_labels.append(
-                        rf"$B_{{\mathrm{{hor}}}} = {spec.level:.0f}\,\mathrm{{G}}$"
+                        rf"${spec_Bhor.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_Bhor.quantity.unit}}}$"
                     )
 
-                ax.set_xlabel(rf"$B_{{\mathrm{{hor}}}} \, \left( \mathrm{{G}} \right)$")
-                ax.set_ylabel(r"$\gamma \, \left( \mathrm{deg} \right)$")
+                ax.set_xlabel(spec_Bhor.label())
+                ax.set_ylabel(spec_Binc.label())
                 ax.set_xlim(left=0, right=4500)
                 ax.set_ylim(bottom=0, top=90)
                 ax.set_xticks(np.arange(0, 5000, 1000).astype(int))

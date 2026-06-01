@@ -113,8 +113,8 @@ def main():
 
         ax.legend()
 
-        ax.set_xlabel(spec.ylabel_mean)
-        ax.set_ylabel(r"PDF (\%)")
+        ax.set_xlabel(spec.label_mean())
+        ax.set_ylabel(r"$\mathrm{PDF} \, \left( \% \right)$")
 
         ax.set_xlim((400, 1200))
         plt.tight_layout()

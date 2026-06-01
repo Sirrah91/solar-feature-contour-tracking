@@ -81,7 +81,7 @@ def main():
         ax.set_xticks([i + 0.5 for i in range(len(phases))])
         ax.set_xticklabels([p.title() for p in phases])
 
-        ax.set_ylabel(spec.ylabel_mean)
+        ax.set_ylabel(spec.label_mean())
 
         plt.tight_layout()
 

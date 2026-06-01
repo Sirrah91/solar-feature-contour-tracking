@@ -7,6 +7,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from scr.config.figures import SAVEFIG_KWARGS
+from scr.config.quantities import get_measurement_spec
 from scr.convective_regimes.analysis.filling import analyse_penumbral_filling_vs_flux
 from scr.convective_regimes.io.loaders import extract_q, load_all
 from scr.convective_regimes.settings import DATA_DIR, FIG_FORMAT, FIGURE_DIR
@@ -64,6 +65,9 @@ def plot_flux_in_target_region(
             * pixelarea_to_Mm2(1.0) * 10 ** 16
     )
 
+    spec_flux = get_measurement_spec("Phi")
+    spec_B = get_measurement_spec("B")
+
     with font_style(fontsize=16):
         fig, ax1 = plt.subplots(1, 1, figsize=(8, 6))
         ax2 = ax1.twinx()
@@ -87,7 +91,9 @@ def plot_flux_in_target_region(
         ax1.axvline(x=pore_threshold, color="black", linestyle="--")
 
         ax1.set_xlabel(
-            r"Magnetic flux enclosed by the $B = 605\,\mathrm{G}$ contour (Mx)"
+            rf"Magnetic flux enclosed by the "
+            rf"${spec_B.quantity.latex[1:-1]} = {605}\,\mathrm{{{spec_B.quantity.unit}}}$"
+            rf" contour\,({spec_flux.quantity.unit})"
         )
         ax1.set_ylabel(
             r"Median filling factor of target region"

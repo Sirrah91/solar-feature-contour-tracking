@@ -200,11 +200,11 @@ def main():
         for ax in (ax_left, ax_right):
             ax.set_xticks(x_ticks)
             ax.set_xticklabels(x_labels)
-            ax.set_xlabel("Helioprojective Longitude (arcsec)")
+            ax.set_xlabel(r"Helioprojective Longitude\,(arcsec)")
 
         ax_left.set_yticks(y_ticks)
         ax_left.set_yticklabels(y_labels)
-        ax_left.set_ylabel("Helioprojective Latitude (arcsec)")
+        ax_left.set_ylabel(r"Helioprojective Latitude\,(arcsec)")
 
         fig.savefig(
             path.join(figure_outdir, f"AR-11084.{FIG_FORMAT}"),

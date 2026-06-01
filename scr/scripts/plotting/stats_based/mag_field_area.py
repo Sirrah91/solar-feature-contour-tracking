@@ -85,9 +85,9 @@ def main():
             formatter=FuncFormatter(lambda v, _: f"{100 * v:.3f}"),
         )
 
-        ax.set_xlabel(spec.ylabel_mean)
+        ax.set_xlabel(spec.label_mean())
         ax.set_ylabel(
-            fr"{'Sunspot' if MODE == 'sunspots' else 'Pore'} area (Mm$^2$)"
+            fr"{'Sunspot' if MODE == 'sunspots' else 'Pore'} area\,(Mm$^2$)"
         )
 
         plt.tight_layout()

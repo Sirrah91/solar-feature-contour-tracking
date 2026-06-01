@@ -9,6 +9,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 from scr.config.figures import SAVEFIG_KWARGS
+from scr.config.quantities import get_measurement_spec
 from scr.convective_regimes.analysis.regression import analyse_regression_with_auc_loss
 from scr.convective_regimes.core.thresholds import (
     BASELINE_WINDOWS,
@@ -107,6 +108,10 @@ def plot_regression(
 
     thresholds = compute_thresholds(phase, data_dir)
 
+    spec_Binc = get_measurement_spec("Binc")
+    spec_Bhor = get_measurement_spec("Bhor")
+    spec_Bver = get_measurement_spec("Bver")
+
     for object_type in ("sunspots", "pores"):
         for region in ("PQ", "UP"):
             cfg = _PLOT_CONFIGS[(object_type, region)]
@@ -125,18 +130,16 @@ def plot_regression(
             with font_style(fontsize=16):
                 fig, ax = plt.subplots(figsize=(8, 6))
                 ax.set_title(title)
-                ax.set_xlabel(r"$\gamma \,\, \left( \mathrm{deg} \right)$")
+                ax.set_xlabel(spec_Binc.label())
                 ax.set_ylabel(
-                    rf"$B_{{\mathrm{{ver}}}}^{{\mathrm{{crit}}}} \left(\gamma \right)"
-                    rf"\,\, \left( \mathrm{{G}} \right)$",
+                    spec_Bver.label(superscript="crit", depends_on=[spec_Binc.quantity]),
                     color="red",
                 )
                 ax.tick_params(axis="y", labelcolor="red")
 
                 ax2 = ax.twinx()
                 ax2.set_ylabel(
-                    rf"$B_{{\mathrm{{hor}}}}^{{\mathrm{{crit}}}}\left(\gamma \right)"
-                    rf"\,\, \left( \mathrm{{G}} \right)$",
+                    spec_Bhor.label(superscript="crit", depends_on=[spec_Binc.quantity]),
                     color="blue",
                 )
                 ax2.tick_params(axis="y", labelcolor="blue")
@@ -171,14 +174,14 @@ def plot_regression(
 
                 lns = []
                 lns += ax.plot([], [], color="red", linewidth=2.5,
-                               label=r"$B_{\mathrm{ver}}$ component")
+                               label=f"{spec_Bver.quantity.latex} component")
                 lns += ax2.plot([], [], color="blue", linewidth=2.5,
-                                label=r"$B_{\mathrm{hor}}$ component")
+                                label=f"{spec_Bhor.quantity.latex} component")
 
                 if estimate.is_valid:
                     xmin_frac = window.gamma_min / cfg.x_max
                     xmax_frac = window.gamma_max / cfg.x_max
-                    comp_label = "ver" if cfg.baseline == "ver" else "hor"
+                    spec = spec_Bver if cfg.baseline == "ver" else spec_Bhor
                     comp_ax = ax if cfg.baseline == "ver" else ax2
                     line_color = "darkred" if cfg.baseline == "ver" else "darkblue"
 
@@ -190,8 +193,8 @@ def plot_regression(
                         linestyle="--",
                         linewidth=2.0,
                         label=(
-                            rf"Baseline $\langle B_{{\mathrm{{{comp_label}}}}}"
-                            rf"\rangle = {estimate.mean:.0f}$ G"
+                            rf"Baseline $\langle {spec.quantity.latex[1:-1]}"
+                            rf"\rangle = {estimate.mean:.0f}\,\mathrm{{{spec.quantity.unit}}}$"
                         ),
                     )
                     lns.append(line_handle)

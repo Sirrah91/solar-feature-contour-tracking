@@ -217,8 +217,8 @@ def main() -> None:
                     linestyle="--"
                 )
 
-            ax_ts.set_xlabel("Time since first detection (h)")
-            ax_ts.set_ylabel(spec_lineplots.ylabel_mean)
+            ax_ts.set_xlabel(r"Time since first detection\,(h)")
+            ax_ts.set_ylabel(spec_lineplots.label_mean())
 
             margin = np.nanmax(df_obs[spec_lineplots.mean_col]) * 0.05
             bottom = max(0, np.nanmin(df_obs[spec_lineplots.mean_col]) - margin)
@@ -238,7 +238,7 @@ def main() -> None:
                 linewidth=2.0,
             )
 
-            ax_std.set_ylabel(spec_lineplots.ylabel_std)
+            ax_std.set_ylabel(spec_lineplots.label_std)
 
             margin = np.nanmax(df_obs[spec_lineplots.std_col]) * 0.05
             bottom = max(0, np.nanmin(df_obs[spec_lineplots.std_col]) - margin)
