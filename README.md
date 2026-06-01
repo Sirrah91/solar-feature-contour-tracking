@@ -152,8 +152,11 @@ See `requirements.txt` for exact versions.
 
 ## Citation
 
-If you use this code in scientific work, please cite:
+If this repository contributes to a scientific publication, please cite:
 
-> Korda et al.,  
-> *Equipartition field strength on the sunspot boundary: Statistical study*,  
-> Astronomy & Astrophysics, 2026.
+> Korda, D., Jurčák, J., Bello González, N., & Schmassmann, M. (2026).  
+> *Equipartition field strength on the sunspot boundary: Statistical study*.  
+> *Astronomy & Astrophysics*, **708**, A51.  
+> https://doi.org/10.1051/0004-6361/202558637
+
+The code in this repository was developed for the analysis presented in the paper.
