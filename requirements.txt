@@ -151,7 +151,7 @@ requests==2.32.5
     # via sunpy
 scikit-image==0.26.0
     # via contours (pyproject.toml)
-scipy==1.17.1
+scipy==1.16.3
     # via
     #   contours (pyproject.toml)
     #   pwlf
@@ -189,3 +189,7 @@ wcwidth==0.6.0
     # via prompt-toolkit
 yarl==1.23.0
     # via aiohttp
+
+scikit-learn==1.8.0
+statsmodels==0.14.6
+patsy==1.0.2

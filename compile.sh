@@ -8,23 +8,28 @@ env="/clusterhome/david/.conda/envs/Contours/bin/python3.11"
 CONDA_LIB_PATH="/clusterhome/david/.conda/envs/Contours/lib"
 src_dir="/nfshome/david/Contours"
 dist_dir="${src_dir}/python_compiled"
-hooks_dir="${src_dir}/scr/devtools/hooks"
+hooks_dir="${src_dir}/src/devtools/hooks"
+rthooks_dir="${src_dir}/src/devtools/rthooks"
 
 # ---------------------------------------------------------------------------
 # Scripts to compile.
-# Paths are relative to src_dir, so subdirectory scripts work fine.
+# Paths are relative to src_dir, so subdirectory cli work fine.
 # ---------------------------------------------------------------------------
 scripts=(
-    "./scr/scripts/utils/job_sizes.py"
-    "./scr/scripts/pipelines/run_image_to_stats.py"
-    "./scr/scripts/pipelines/run_split_to_phases.py"
-    "./scr/scripts/pipelines/run_contour_tracking.py"
-    "./scr/scripts/pipelines/run_sunspot_association.py"
-    "./scr/scripts/pipelines/run_sunspot_tracking_multilevel.py"
-    "./scr/scripts/pipelines/run_calc_stats.py"
-    "./scr/convective_regimes/scripts/run_extract.py"
-    "./scr/convective_regimes/scripts/run_regression.py"
-    "./scr/convective_regimes/scripts/run_probabilities.py"
+    #"./src/cli/utils/job_sizes.py"
+    #"./src/cli/run_image_to_stats.py"
+    #"./src/cli/run_split_to_phases.py"
+    #"./src/cli/run_contour_tracking.py"
+    #"./src/cli/run_sunspot_association.py"
+    #"./src/cli/run_sunspot_tracking_multilevel.py"
+    #"./src/cli/run_calc_stats.py"
+    #"./src/convective_regimes/cli/run_extract.py"
+    #"./src/convective_regimes/cli/run_regression.py"
+    #"./src/convective_regimes/cli/run_probabilities.py"
+    #"./src/penumbra_evolution/cli/run_completeness.py"
+    #"./src/penumbra_evolution/cli/run_background.py"
+    "./src/penumbra_evolution/cli/run_companion.py"
+    "./src/penumbra_evolution/cli/run_analysis.py"
 )
 
 # ---------------------------------------------------------------------------
@@ -67,6 +72,7 @@ for script in "${scripts[@]}"; do
         --name="${name}" \
         --paths="${CONDA_LIB_PATH}" \
         --additional-hooks-dir="${hooks_dir}" \
+        --runtime-hook="${rthooks_dir}/rthook-environment.py" \
         "${script}"
 
     specfile="./${name}.spec"
