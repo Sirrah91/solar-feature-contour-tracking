@@ -10,6 +10,7 @@ mkdir -p "${LD}"
 SETTINGS=" \
 --filter_modes sunspots pores \
 --phases all forming stable decaying \
+--ic_subbins neginf inf \
 --quantities Bhor \
 --boundary b605.0 \
 --n_B_bins 150 \
