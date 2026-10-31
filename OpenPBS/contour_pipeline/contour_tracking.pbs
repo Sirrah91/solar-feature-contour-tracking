@@ -1,0 +1,46 @@
+#!/bin/sh
+
+
+###############################################################
+# PBS part
+###############################################################
+
+# Assigns a job name
+#PBS -N contour_tracking
+
+# Assigns the queue
+#PBS -q eternity
+
+# PBS -l nodes=1:ppn=1
+# PBS -l host=radegast-local
+
+#Join option
+# PBS -j oe
+# PBS -M d.korda@seznam.cz
+
+# Sends mail to the user when the job begins, ends, aborts.
+# PBS -m a
+
+#PBS -o /nfshome/david/Contours/log/default_contour_tracking.out
+#PBS -e /nfshome/david/Contours/log/default_contour_tracking.err
+
+#PBS -V
+PBS_O_WORKDIR="${WD}"
+
+# Redirect output and error files to specific files after PBS_JOBID is set
+# output_file="${LD}/${PBS_JOBID}_contour_tracking.out"
+# error_file="${LD}/${PBS_JOBID}_contour_tracking.err"
+
+# Redirect stdout and stderr to the desired files
+# exec > "$output_file" 2> "$error_file"
+
+##############################################################
+# Execution
+##############################################################
+# Move to the directory where the Python script is located
+cd "${PBS_O_WORKDIR}" || exit
+
+export MPLBACKEND="Agg"
+
+# Run the Python script
+./run_contour_tracking_bin ${SETTINGS} 2>&1 | tee "${LD}/${PBS_JOBID}_contour_tracking.log"
