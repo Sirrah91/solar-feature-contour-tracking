@@ -184,7 +184,7 @@ def plot_probability_counts(
                     h, _ = cs.legend_elements()
                     legend_handles += h
                     legend_labels.append(
-                        rf"${spec_B.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_B.quantity.unit}}}$"
+                        rf"${spec_B.quantity.latex[1:-1]} = {spec.level:.0f}\,\text{{{spec_B.quantity.unit}}}$"
                     )
 
                 for spec in cfg["Bver"]:
@@ -194,7 +194,7 @@ def plot_probability_counts(
                     h, _ = cs.legend_elements()
                     legend_handles += h
                     legend_labels.append(
-                        rf"${spec_Bver.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_Bver.quantity.unit}}}$"
+                        rf"${spec_Bver.quantity.latex[1:-1]} = {spec.level:.0f}\,\text{{{spec_Bver.quantity.unit}}}$"
                     )
 
                 for spec in cfg["Bhor"]:
@@ -202,7 +202,7 @@ def plot_probability_counts(
                                    linestyle=spec.linestyle, linewidth=spec.linewidth)
                     legend_handles.append(h)
                     legend_labels.append(
-                        rf"${spec_Bhor.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_Bhor.quantity.unit}}}$"
+                        rf"${spec_Bhor.quantity.latex[1:-1]} = {spec.level:.0f}\,\text{{{spec_Bhor.quantity.unit}}}$"
                     )
 
                 ax.set_xlabel(spec_Bhor.label())
@@ -216,13 +216,13 @@ def plot_probability_counts(
                     limits = region.split("_")[-1].split("-")
                     limits = [float(l) for l in limits]
                     reg_label = (
-                        fr"{limits[0]:.1f}\,I^\mathrm{{c}}_\mathrm{{QS}} < I^\mathrm{{c}}"
-                        fr" \leq {limits[1]:.1f}\,I^\mathrm{{c}}_\mathrm{{QS}}"
+                        fr"{limits[0]:.1f}\,I^\text{{c}}_\text{{QS}} < I^\text{{c}}"
+                        fr" \leq {limits[1]:.1f}\,I^\text{{c}}_\text{{QS}}"
                     )
                 else:
                     reg_label = (
-                        r"0.5\,I^\mathrm{c}_\mathrm{QS} < I^\mathrm{c}"
-                        r" \leq 0.9\,I^\mathrm{c}_\mathrm{QS}"
+                        r"0.5\,I^\text{c}_\text{QS} < I^\text{c}"
+                        r" \leq 0.9\,I^\text{c}_\text{QS}"
                     )
                 cbar = add_colorbar(
                     ax, im,
