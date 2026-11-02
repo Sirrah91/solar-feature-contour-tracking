@@ -28,7 +28,7 @@ def main():
     # ------------------------------------------------------------------
     QUANTITY: Quantity = "Bhor"
     WHERE: SunspotPart = "Ic<0.9"
-    MODE: ObjectFilteringMode = "pores"
+    MODE: ObjectFilteringMode = "sunspots"
     PATH_SUNSPOTS_PHASES = "/nfsscratch/david/Contours/sunspots_removed_phases"
 
     spec = get_measurement_spec(QUANTITY, WHERE)
