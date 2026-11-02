@@ -1,3 +1,4 @@
+from typing import Sequence
 import numpy as np
 from scipy.optimize import curve_fit
 
@@ -9,20 +10,6 @@ def gaussian(
         sigma: np.ndarray
 ) -> np.ndarray:
     return A * np.exp(-(x - mu) ** 2 / (2 * sigma ** 2))
-
-
-def fit_gaussian_to_histogram(
-        data: np.ndarray,
-        *,
-        bins: str | int = "auto",
-        density: bool = False,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    counts, edges = np.histogram(data[np.isfinite(data)], bins=bins, density=density)
-    centers = (edges[:-1] + edges[1:]) / 2
-    
-    popt, pcov = fit_gaussian_to_histogram_values(centers=centers, counts=counts)
-
-    return popt, pcov, centers, counts
 
 
 def fit_gaussian_to_histogram_values(
@@ -43,7 +30,12 @@ def fit_gaussian_to_histogram_values(
         raise ValueError("At least three valid histogram bins are required.")
 
     peak_idx = np.argmax(counts)
-    p0 = [counts[peak_idx], centers[peak_idx], 50.0]
+    weights = np.maximum(counts, 0)
+    mu0 = np.average(centers, weights=weights)
+    sigma0 = np.sqrt(np.average((centers - mu0) ** 2, weights=weights))
+
+    sigma0 = max(sigma0, np.min(np.diff(centers)))
+    p0 = [counts[peak_idx], centers[peak_idx], sigma0]
 
     popt, pcov = curve_fit(
         gaussian,
@@ -54,3 +46,17 @@ def fit_gaussian_to_histogram_values(
     )
 
     return popt, pcov
+
+
+def fit_gaussian_to_histogram(
+        data: np.ndarray,
+        *,
+        bins: str | int | Sequence[float] = "auto",
+        density: bool = False,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    counts, edges = np.histogram(data[np.isfinite(data)], bins=bins, density=density)
+    centers = (edges[:-1] + edges[1:]) / 2
+    
+    popt, pcov = fit_gaussian_to_histogram_values(centers=centers, counts=counts)
+
+    return popt, pcov, centers, counts
