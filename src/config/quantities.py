@@ -41,10 +41,6 @@ class LocationSpec:
     label: str
 
 
-def _latex_space(value: str) -> str:
-    return value.replace(" ", r"\ ")
-
-
 @dataclass(frozen=True)
 class MeasurementSpec:
     quantity: QuantitySpec
