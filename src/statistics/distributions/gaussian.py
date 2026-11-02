@@ -14,9 +14,10 @@ def gaussian(
 def fit_gaussian_to_histogram(
         data: np.ndarray,
         *,
-        bins: str | int = "auto"
+        bins: str | int = "auto",
+        density: bool = False,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    counts, edges = np.histogram(data[np.isfinite(data)], bins=bins, density=True)
+    counts, edges = np.histogram(data[np.isfinite(data)], bins=bins, density=density)
     centers = (edges[:-1] + edges[1:]) / 2
 
     p0 = [counts.max(), centers[np.argmax(counts)], 50]
