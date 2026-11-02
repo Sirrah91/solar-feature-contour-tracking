@@ -41,6 +41,10 @@ class LocationSpec:
     label: str
 
 
+def _latex_space(value: str) -> str:
+    return value.replace(" ", r"\ ")
+
+
 @dataclass(frozen=True)
 class MeasurementSpec:
     quantity: QuantitySpec
@@ -61,8 +65,8 @@ class MeasurementSpec:
         if self.quantity.unit:
             parts.append(rf"\mathrm{{{self.quantity.unit}}}")
         if self.location:
-            parts.append(rf"\mathrm{{{self.location.label}}}")
-        return rf"\,\left({', '.join(parts)}\right)" if parts else ""
+            parts.append(rf"\mathrm{{{_latex_space(self.location.label)}}}")
+        return rf"\,\left({_latex_space(', ').join(parts)}\right)" if parts else ""
 
     def _make_label(
             self,
@@ -73,9 +77,9 @@ class MeasurementSpec:
             depends_on: list[QuantitySpec] | None = None,
     ) -> str:
         if superscript is not None:
-            inner = rf"{inner}^{{\mathrm{{{superscript}}}}}"
+            inner = rf"{inner}^{{\mathrm{{{_latex_space(superscript)}}}}}"
         if subscript is not None:
-            inner = rf"{inner}_{{\mathrm{{{subscript}}}}}"
+            inner = rf"{inner}_{{\mathrm{{{_latex_space(subscript)}}}}}"
         return f"${inner}{self._dep(depends_on)}{self._suffix()}$"
 
     # ── public labels ─────────────────────────────────────────────────
