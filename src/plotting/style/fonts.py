@@ -10,7 +10,6 @@ def font_style(
         fontsize: int = 12,
         font_family: Literal["serif", "sans-serif"] = "sans-serif",
         use_tex: bool = True,
-        amsmath: bool = True
 ):
     """
     Context manager to set plot typography and LaTeX rendering.
@@ -30,9 +29,6 @@ def font_style(
         internal 'mathtext' is used with Computer Modern (cm) fonts.
         Automatically falls back to False if a `latex` executable
         cannot be found on PATH, regardless of the requested value.
-    amsmath : bool, default: True
-        If True and `use_tex` is True, adds '\\usepackage{amsmath}'
-        to the LaTeX preamble.
 
     Yields
     ------
@@ -60,7 +56,7 @@ def font_style(
         "mathtext.fontset": mathtext_fontsets[font_family],
     }
 
-    if use_tex and amsmath:
+    if use_tex:
         settings["text.latex.preamble"] = r"\usepackage{amsmath}"
 
     with plt.rc_context(rc=settings):
