@@ -26,9 +26,9 @@ def font_style(
         Font family to use.
     use_tex : bool, default: True
         Whether to invoke an external LaTeX distribution. If False,
-        internal 'mathtext' is used with Computer Modern (cm) fonts.
-        Automatically falls back to False if a `latex` executable
-        cannot be found on PATH, regardless of the requested value.
+        Matplotlib's internal MathText renderer is used with a font
+        matching the selected font_family. Automatically falls back
+        to False if a `latex` executable cannot be found on PATH.
 
     Yields
     ------
