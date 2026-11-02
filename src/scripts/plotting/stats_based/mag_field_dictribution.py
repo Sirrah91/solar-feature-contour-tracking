@@ -95,7 +95,7 @@ def main():
         )
 
         # Gaussian fit to the quality-selected stable subset
-        fit_line, fit_label = overlay_gaussian_fit(
+        gaussian_fit = overlay_gaussian_fit(
             ax,
             handles[-1],
             spec_quantity=spec.quantity,
@@ -104,11 +104,7 @@ def main():
                 "linewidth": 2.0,
             },
         )
-        handles.append(fit_line)
-
-        # Dummy handle to show fit parameters in the legend
-        dummy_line = ax.plot([], [], color="none", label=fit_label)
-        handles.append(dummy_line)
+        handles.extend(gaussian_fit)
 
         ax.legend()
 
