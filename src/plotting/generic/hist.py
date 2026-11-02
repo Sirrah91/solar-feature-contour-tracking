@@ -1,16 +1,93 @@
+from typing import Mapping, Sequence
+
 import numpy as np
+
 from matplotlib.axes import Axes
 from matplotlib.collections import QuadMesh
 from matplotlib.colors import Normalize
 from matplotlib.lines import Line2D
-from typing import Sequence
 
-from src.config.quantities import MeasurementSpec
-
-from src.statistics.distributions.gaussian import gaussian, fit_gaussian_to_histogram
-
+from src.config.quantities import QuantitySpec
+from src.statistics.distributions.gaussian import (
+    gaussian,
+    fit_gaussian_to_histogram,
+)
 from src.plotting.utils import merge_explicit_kwargs
 from src.plotting.generic.lines import plot_line
+
+
+QuantitySpecInput = QuantitySpec | Mapping[str, str | None] | None
+
+
+def _strip_math_delimiters(value: str | None) -> str | None:
+    if value is None:
+        return None
+
+    value = value.strip()
+
+    if not value:
+        return None
+
+    if value.startswith("$"):
+        value = value[1]
+    if value.endswith("$"):
+        value = value[:-1]
+
+    return value
+
+
+def _get_quantity_display_info(
+        spec_quantity: QuantitySpecInput,
+) -> tuple[str | None, str | None, str]:
+    """Extract optional LaTeX labels and unit for quantity display."""
+    if spec_quantity is None:
+        return r"\mu", r"\sigma", ""
+
+    if isinstance(spec_quantity, QuantitySpec):
+        return (
+            _strip_math_delimiters(spec_quantity.latex_mean),
+            _strip_math_delimiters(spec_quantity.latex_std),
+            spec_quantity.unit,
+        )
+
+    latex_mean = spec_quantity.get("latex_mean", r"\mu")
+    latex_std = spec_quantity.get("latex_std", r"\sigma")
+    unit = spec_quantity.get("unit", "")
+
+    for name, value in (
+            ("latex_mean", latex_mean),
+            ("latex_std", latex_std),
+            ("unit", unit),
+    ):
+        if value is not None and not isinstance(value, str):
+            raise TypeError(
+                f"Expected '{name}' to be a string or None, "
+                f"got {type(value).__name__}."
+            )
+
+    return (
+        _strip_math_delimiters(latex_mean),
+        _strip_math_delimiters(latex_std),
+        unit,
+    )
+
+
+def _format_gaussian_parameter(
+        value: float,
+        *,
+        symbol: str | None,
+        unit: str,
+        text_prec: int,
+) -> str:
+    value_text = f"{value:.{text_prec}f}"
+
+    if unit:
+        value_text += rf"\,\mathsf{{{unit}}}"
+
+    if symbol is not None:
+        value_text = rf"{symbol} = {value_text}"
+
+    return f"${value_text}$"
 
 
 def plot_hist1d(
@@ -94,23 +171,37 @@ def overlay_gaussian_fit(
         data: np.ndarray,
         *,
         bins: str | int,
-        spec: MeasurementSpec,
+        spec_quantity: QuantitySpecInput = None,
         label: str = "Gaussian fit",
         line_kwargs: dict | None = None,
+        text_prec: int = 0,
 ) -> tuple[Line2D, str]:
     line_kwargs = merge_explicit_kwargs(
         line_kwargs,
         label=label,
     )
 
-    popt, _, centers, counts = fit_gaussian_to_histogram(data, bins=bins)
+    popt, _, centers, _ = fit_gaussian_to_histogram(data, bins=bins)
     x = np.linspace(centers.min(), centers.max(), 300)
     y = gaussian(x, *popt) * 100
 
     line = plot_line(ax, x, y, line_kwargs=line_kwargs)
 
     mu, sigma = popt[1], popt[2]
-    # [1:-1] to cut $
-    text = rf"${spec.quantity.latex_mean[1:-1]} = {mu:.0f}\,{spec.quantity.unit}$, $\sigma={sigma:.0f}\,{spec.quantity.unit}$"
 
-    return line, text
+    latex_mean, latex_std, unit = _get_quantity_display_info(spec_quantity)
+
+    mean_text = _format_gaussian_parameter(
+        mu,
+        symbol=latex_mean,
+        unit=unit,
+        text_prec=text_prec,
+    )
+    std_text = _format_gaussian_parameter(
+        sigma,
+        symbol=latex_std,
+        unit=unit,
+        text_prec=text_prec,
+    )
+
+    return line, f"{mean_text}, {std_text}"
