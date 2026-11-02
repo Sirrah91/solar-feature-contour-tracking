@@ -75,7 +75,7 @@ def _format_gaussian_parameter(
     value_text = f"{value:.{text_prec}f}"
 
     if unit:
-        value_text += rf"\,\mathsf{{{unit}}}"
+        value_text += rf"\,\mathrm{{{unit}}}"
 
     if symbol is not None:
         value_text = rf"{symbol} = {value_text}"
