@@ -203,9 +203,9 @@ def plot_1d_histograms(
 
     regions = ["Ic<0.5", "Ic<0.65", "Ic<0.9"]
     region_labels = [
-        r"$I^\mathrm{c} = 0.5I^\mathrm{c}_\mathrm{QS}$",
-        r"$I^\mathrm{c} = 0.65I^\mathrm{c}_\mathrm{QS}$",
-        r"$I^\mathrm{c} = 0.9I^\mathrm{c}_\mathrm{QS}$",
+        r"$I^\text{c} = 0.5I^\text{c}_\text{QS}$",
+        r"$I^\text{c} = 0.65I^\text{c}_\text{QS}$",
+        r"$I^\text{c} = 0.9I^\text{c}_\text{QS}$",
     ]
     col = "Bhor_{reg}_flux-border_corr_mean"
 
@@ -242,7 +242,7 @@ def plot_1d_histograms(
             ax.set_xlabel(spec_Bhor.label())
             ax.set_xlim((300, 1700))
 
-        axes[0].set_ylabel(r"$\mathrm{PDF} \, \left( \% \right)$")
+        axes[0].set_ylabel(r"$\text{PDF} \, \left( \% \right)$")
         plt.tight_layout()
 
         fig.savefig(
