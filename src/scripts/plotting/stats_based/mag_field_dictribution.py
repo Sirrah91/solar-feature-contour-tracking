@@ -98,7 +98,7 @@ def main():
             ax,
             stable_subset,
             bins="auto",
-            spec=spec,
+            spec_quantity=spec.quantity,
             line_kwargs={
                 "color": "black",
                 "linewidth": 2.0,
