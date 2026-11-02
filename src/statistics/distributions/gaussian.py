@@ -20,6 +20,5 @@ def fit_gaussian_to_histogram(
     centers = (edges[:-1] + edges[1:]) / 2
 
     p0 = [counts.max(), centers[np.argmax(counts)], 50]
-    popt, pcov = curve_fit(gaussian, centers, counts, p0=p0)
-
+    popt, pcov = curve_fit(gaussian, centers, counts, p0=p0, bounds=([-np.inf, -np.inf, 0], [np.inf, np.inf, np.inf]))
     return popt, pcov, centers, counts
