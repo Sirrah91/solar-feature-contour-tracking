@@ -8,7 +8,7 @@ from matplotlib.colors import Normalize
 from matplotlib.lines import Line2D
 
 from src.config.quantities import QuantitySpec
-from src.config.figures import latex_math_font
+from src.config.figures import LATEX_MATH_FONT
 from src.statistics.distributions.gaussian import (
     gaussian,
     fit_gaussian_to_histogram_values,
@@ -76,7 +76,7 @@ def _format_gaussian_parameter(
     value_text = f"{value:.{text_prec}f}"
 
     if unit:
-        value_text += rf"\,{latex_math_font}{{{unit}}}"
+        value_text += rf"\,{LATEX_MATH_FONT}{{{unit}}}"
 
     if symbol is not None:
         value_text = rf"{symbol} = {value_text}"
