@@ -10,7 +10,7 @@ from matplotlib.lines import Line2D
 from src.config.quantities import QuantitySpec
 from src.statistics.distributions.gaussian import (
     gaussian,
-    fit_gaussian_to_histogram,
+    fit_gaussian_to_histogram_values,
 )
 from src.plotting.utils import merge_explicit_kwargs
 from src.plotting.generic.lines import plot_line
@@ -168,11 +168,8 @@ def plot_hist2d(
 
 def overlay_gaussian_fit(
         ax: Axes,
-        data: np.ndarray,
+        histogram_line: Line2D,
         *,
-        bins: str | int,
-        density: bool = False,
-        scale: float = 1.0,
         spec_quantity: QuantitySpecInput = None,
         label: str = "Gaussian fit",
         line_kwargs: dict | None = None,
@@ -183,9 +180,11 @@ def overlay_gaussian_fit(
         label=label,
     )
 
-    popt, _, centers, _ = fit_gaussian_to_histogram(data, bins=bins, density=density)
+    centers, counts = histogram_line.get_data()
+    popt, _ = fit_gaussian_to_histogram_values(centers, counts)
+
     x = np.linspace(centers.min(), centers.max(), 300)
-    y = gaussian(x, *popt) * scale
+    y = gaussian(x, *popt)
 
     line = plot_line(ax, x, y, line_kwargs=line_kwargs)
 
