@@ -24,16 +24,9 @@ def _strip_math_delimiters(value: str | None) -> str | None:
         return None
 
     value = value.strip()
+    value = value.strip("$")
 
-    if not value:
-        return None
-
-    if value.startswith("$"):
-        value = value[1:]
-    if value.endswith("$"):
-        value = value[:-1]
-
-    return value
+    return value or None
 
 
 def _get_quantity_display_info(
@@ -174,7 +167,7 @@ def overlay_gaussian_fit(
         label: str = "Gaussian fit",
         line_kwargs: dict | None = None,
         text_prec: int = 0,
-) -> tuple[Line2D, str]:
+) -> tuple[Line2D, Line2D]:
     line_kwargs = merge_explicit_kwargs(
         line_kwargs,
         label=label,
@@ -205,4 +198,6 @@ def overlay_gaussian_fit(
         text_prec=text_prec,
     )
 
-    return line, f"{mean_text}, {std_text}"
+    dummy_line, = ax.plot([], [], color="none", label=f"{mean_text}, {std_text}")
+
+    return line, dummy_line
