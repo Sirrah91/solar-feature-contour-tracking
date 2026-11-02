@@ -2,11 +2,13 @@ import shutil
 import warnings
 import matplotlib.pyplot as plt
 from contextlib import contextmanager
+from typing import Literal
 
 
 @contextmanager
 def font_style(
         fontsize: int = 12,
+        font_family: Literal["serif", "sans-serif"] = "sans-serif",
         use_tex: bool = True,
         amsmath: bool = True
 ):
@@ -21,6 +23,8 @@ def font_style(
     ----------
     fontsize : int, default: 12
         Base font size in points.
+    font_family : str, default "sans-serif"
+        Font family to use.
     use_tex : bool, default: True
         Whether to invoke an external LaTeX distribution. If False,
         internal 'mathtext' is used with Computer Modern (cm) fonts.
@@ -44,11 +48,16 @@ def font_style(
         )
         use_tex = False
 
+    mathtext_fontsets = {
+        "serif": "dejavuserif",
+        "sans-serif": "dejavusans",
+    }
+
     settings = {
         "text.usetex": use_tex,
         "font.size": fontsize,
-        "font.family": "sans-serif",
-        "mathtext.fontset": "cm"
+        "font.family": font_family,
+        "mathtext.fontset": mathtext_fontsets[font_family],
     }
 
     if use_tex and amsmath:
