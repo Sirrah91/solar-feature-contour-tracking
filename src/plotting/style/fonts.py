@@ -88,38 +88,15 @@ def font_style(
     Consequently, figures that may be rendered or redrawn afterwards
     should use set_font_style() instead.
 
-    For interactive plotting with blocking display, use
-    plt.show(block=True). This keeps the context active until all
-    figure windows are closed.
-
-    Alternatively, for non-blocking display, fig.canvas.draw() forces
-    synchronous rendering while the context is still active:
-
-        fig.canvas.draw()
-        plt.show(block=False)
-
-    This ensures that the initial rendering uses the configured settings.
-    However, subsequent GUI redraws (e.g. when resizing or uncovering
-    a window) may happen after the context exits. For reliable rendering
-    throughout the lifetime of interactive figures, use set_font_style().
+    For interactive plotting, blocking display (plt.show(block=True))
+    can be used to keep the context active until the figure window closes.
 
     Examples
     --------
-    Blocking interactive display:
-
     >>> with font_style(fontsize=20, font_family="serif"):
     ...     fig, ax = plt.subplots()
     ...     ax.set_xlabel(r"$\\text{Pore area}$")
     ...     fig.savefig("pore_area.pdf")
-    ...     plt.show(block=True)
-
-    Non-blocking display with synchronous initial rendering:
-
-    >>> with font_style(fontsize=20):
-    ...     fig, ax = plt.subplots()
-    ...     ax.set_xlabel(r"$\\text{Pore area}$")
-    ...     fig.canvas.draw()
-    ...     plt.show(block=False)
     """
     with plt.rc_context(rc=_get_font_settings(
             fontsize=fontsize,
