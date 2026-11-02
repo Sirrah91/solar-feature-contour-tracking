@@ -25,8 +25,8 @@ def plot_fractal_dimension_control(
                   line_kwargs={"color": "red", "linewidth": 2,
                                "label": rf"Linear Fit ($D \approx {fractal_dim:.3f}$)"})
 
-        ax.set_xlabel(r"$\log(1 / \mathrm{box\ size})$")
-        ax.set_ylabel(r"$\log(N_\mathrm{boxes})$")
+        ax.set_xlabel(r"$\log(1 / \text{box size})$")
+        ax.set_ylabel(r"$\log(N_\text{boxes})$")
         ax.set_title("Box-Counting Dimension Diagnostic")
 
         ax.grid(True, linestyle="--", alpha=0.7)
