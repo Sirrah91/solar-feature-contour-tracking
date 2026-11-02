@@ -44,8 +44,8 @@ _PLOT_CONFIGS: dict[tuple[FilterMode, str], _PlotConfig] = {
 }
 
 _TITLES = {
-    "PQ": r"$I^\mathrm{{c}} = 0.9\,I^\mathrm{{c}}_\mathrm{{QS}}$",
-    "UP": r"$I^\mathrm{{c}} = 0.5\,I^\mathrm{{c}}_\mathrm{{QS}}$",
+    "PQ": r"$I^\text{{c}} = 0.9\,I^\text{{c}}_\text{{QS}}$",
+    "UP": r"$I^\text{{c}} = 0.5\,I^\text{{c}}_\text{{QS}}$",
 }
 
 # Maps (object_type, region, component) → attribute name on RegressionThresholds
@@ -207,7 +207,7 @@ def plot_regression(
                         linewidth=2.0,
                         label=(
                             rf"Baseline $\langle {spec.quantity.latex[1:-1]}"
-                            rf"\rangle = {estimate.mean:.0f}\,\mathrm{{{spec.quantity.unit}}}$"
+                            rf"\rangle = {estimate.mean:.0f}\,\text{{{spec.quantity.unit}}}$"
                         ),
                     )
                     lns.append(line_handle)
