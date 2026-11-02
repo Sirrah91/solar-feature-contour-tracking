@@ -57,7 +57,12 @@ def font_style(
     }
 
     if use_tex:
-        settings["text.latex.preamble"] = r"\usepackage{amsmath}"
+        preamble = [r"\usepackage{amsmath}"]
+
+        if font_family == "sans-serif":
+            preamble.append(r"\usepackage{sfmath}")
+
+        settings["text.latex.preamble"] = "".join(preamble)
 
     with plt.rc_context(rc=settings):
         yield
