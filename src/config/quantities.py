@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.config.figures import latex_math_font
+from src.config.figures import LATEX_MATH_FONT
 from src.utils.types_alias import Quantity, SunspotPart
 
 
@@ -64,9 +64,9 @@ class MeasurementSpec:
         """Parenthesised unit + location clause, or ''."""
         parts = []
         if self.quantity.unit:
-            parts.append(rf"{latex_math_font}{{{self.quantity.unit}}}")
+            parts.append(rf"{LATEX_MATH_FONT}{{{self.quantity.unit}}}")
         if self.location:
-            parts.append(rf"{latex_math_font}{{{_latex_space(self.location.label)}}}")
+            parts.append(rf"{LATEX_MATH_FONT}{{{_latex_space(self.location.label)}}}")
         return rf"\,\left({_latex_space(', ').join(parts)}\right)" if parts else ""
 
     def _make_label(
@@ -78,9 +78,9 @@ class MeasurementSpec:
             depends_on: list[QuantitySpec] | None = None,
     ) -> str:
         if superscript is not None:
-            inner = rf"{inner}^{{{latex_math_font}{{{_latex_space(superscript)}}}}}"
+            inner = rf"{inner}^{{{LATEX_MATH_FONT}{{{_latex_space(superscript)}}}}}"
         if subscript is not None:
-            inner = rf"{inner}_{{{latex_math_font}{{{_latex_space(subscript)}}}}}"
+            inner = rf"{inner}_{{{LATEX_MATH_FONT}{{{_latex_space(subscript)}}}}}"
         return f"${inner}{self._dep(depends_on)}{self._suffix()}$"
 
     # ── public labels ─────────────────────────────────────────────────
@@ -137,7 +137,7 @@ class MeasurementSpec:
 _QUANTITIES = {
     "Ic": QuantitySpec(
         name="Ic",
-        latex=r"$I^{latex_math_font}{c}/I^{latex_math_font}{c}_{latex_math_font}{QS}$",
+        latex=r"$I^{LATEX_MATH_FONT}{c}/I^{LATEX_MATH_FONT}{c}_{LATEX_MATH_FONT}{QS}$",
         unit="",
         mean_col_template="Ic_{loc}_mean",
         std_col_template="Ic_{loc}_std",
@@ -151,28 +151,28 @@ _QUANTITIES = {
     ),
     "Bp": QuantitySpec(
         name="Bp",
-        latex=r"$B_{{latex_math_font}{p}}$",
+        latex=r"$B_{{LATEX_MATH_FONT}{p}}$",
         unit="G",
         mean_col_template="Bp_{loc}_mean",
         std_col_template="Bp_{loc}_std",
     ),
     "Bt": QuantitySpec(
         name="Bt",
-        latex=r"$B_{{latex_math_font}{t}}$",
+        latex=r"$B_{{LATEX_MATH_FONT}{t}}$",
         unit="G",
         mean_col_template="Bt_{loc}_mean",
         std_col_template="Bt_{loc}_std",
     ),
     "Bver": QuantitySpec(
         name="Bver",
-        latex=r"$B_{{latex_math_font}{ver}}$",
+        latex=r"$B_{{LATEX_MATH_FONT}{ver}}$",
         unit="G",
         mean_col_template="Br_{loc}_mean",
         std_col_template="Br_{loc}_std",
     ),
     "Bhor": QuantitySpec(
         name="Bhor",
-        latex=r"$B_{{latex_math_font}{hor}}$",
+        latex=r"$B_{{LATEX_MATH_FONT}{hor}}$",
         unit="G",
         mean_col_template="Bhor_{loc}_mean",
         std_col_template="Bhor_{loc}_std",
