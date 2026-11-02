@@ -172,6 +172,7 @@ def overlay_gaussian_fit(
         *,
         bins: str | int,
         density: bool = False,
+        scale: float = 1.0,
         spec_quantity: QuantitySpecInput = None,
         label: str = "Gaussian fit",
         line_kwargs: dict | None = None,
@@ -184,7 +185,7 @@ def overlay_gaussian_fit(
 
     popt, _, centers, _ = fit_gaussian_to_histogram(data, bins=bins, density=density)
     x = np.linspace(centers.min(), centers.max(), 300)
-    y = gaussian(x, *popt) * 100
+    y = gaussian(x, *popt) * scale
 
     line = plot_line(ax, x, y, line_kwargs=line_kwargs)
 
