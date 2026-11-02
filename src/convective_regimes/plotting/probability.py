@@ -8,7 +8,7 @@ import re
 import numpy as np
 from os import path
 
-from src.config.figures import CBAR_KWARGS, SAVEFIG_KWARGS
+from src.config.figures import CBAR_KWARGS, SAVEFIG_KWARGS, LATEX_MATH_FONT
 from src.config.quantities import get_measurement_spec
 from src.convective_regimes.core.regions import SUNSPOT_PQ_B_THRESHOLD
 from src.convective_regimes.core.thresholds import RegressionThresholds, compute_thresholds
@@ -184,7 +184,7 @@ def plot_probability_counts(
                     h, _ = cs.legend_elements()
                     legend_handles += h
                     legend_labels.append(
-                        rf"${spec_B.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_B.quantity.unit}}}$"
+                        rf"${spec_B.quantity.latex[1:-1]} = {spec.level:.0f}\,{LATEX_MATH_FONT}{{{spec_B.quantity.unit}}}$"
                     )
 
                 for spec in cfg["Bver"]:
@@ -194,7 +194,7 @@ def plot_probability_counts(
                     h, _ = cs.legend_elements()
                     legend_handles += h
                     legend_labels.append(
-                        rf"${spec_Bver.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_Bver.quantity.unit}}}$"
+                        rf"${spec_Bver.quantity.latex[1:-1]} = {spec.level:.0f}\,{LATEX_MATH_FONT}{{{spec_Bver.quantity.unit}}}$"
                     )
 
                 for spec in cfg["Bhor"]:
@@ -202,7 +202,7 @@ def plot_probability_counts(
                                    linestyle=spec.linestyle, linewidth=spec.linewidth)
                     legend_handles.append(h)
                     legend_labels.append(
-                        rf"${spec_Bhor.quantity.latex[1:-1]} = {spec.level:.0f}\,\mathrm{{{spec_Bhor.quantity.unit}}}$"
+                        rf"${spec_Bhor.quantity.latex[1:-1]} = {spec.level:.0f}\,{LATEX_MATH_FONT}{{{spec_Bhor.quantity.unit}}}$"
                     )
 
                 ax.set_xlabel(spec_Bhor.label())
@@ -216,13 +216,13 @@ def plot_probability_counts(
                     limits = region.split("_")[-1].split("-")
                     limits = [float(l) for l in limits]
                     reg_label = (
-                        fr"{limits[0]:.1f}\,I^\mathrm{{c}}_\mathrm{{QS}} < I^\mathrm{{c}}"
-                        fr" \leq {limits[1]:.1f}\,I^\mathrm{{c}}_\mathrm{{QS}}"
+                        fr"{limits[0]:.1f}\,I^{LATEX_MATH_FONT}{{c}}_{LATEX_MATH_FONT}{{QS}} < I^{LATEX_MATH_FONT}{{c}}"
+                        fr" \leq {limits[1]:.1f}\,I^{LATEX_MATH_FONT}{{c}}_{LATEX_MATH_FONT}{{QS}}"
                     )
                 else:
                     reg_label = (
-                        r"0.5\,I^\mathrm{c}_\mathrm{QS} < I^\mathrm{c}"
-                        r" \leq 0.9\,I^\mathrm{c}_\mathrm{QS}"
+                        fr"0.5\,I^{LATEX_MATH_FONT}{{c}}_{LATEX_MATH_FONT}{{QS}} < I^{LATEX_MATH_FONT}{{c}}"
+                        fr" \leq 0.9\,I^{LATEX_MATH_FONT}{{c}}_{LATEX_MATH_FONT}{{QS}}"
                     )
                 cbar = add_colorbar(
                     ax, im,
