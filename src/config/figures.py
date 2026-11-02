@@ -12,4 +12,4 @@ CBAR_KWARGS = {
     "pad": 0.1,
 }
 
-latex_math_font = r"\mathrm"
+LATEX_MATH_FONT = r"\mathrm"
