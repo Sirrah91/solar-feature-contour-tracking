@@ -83,6 +83,7 @@ def main():
     # ------------------------------------------------------------------
     # Plot
     # ------------------------------------------------------------------
+    density = True
     with font_style(fontsize=20):
         fig, ax = plt.subplots(figsize=(10, 10))
 
@@ -90,7 +91,7 @@ def main():
             ax, [forming, stable, decaying, stable_subset],
             labels=["Forming", "Stable", "Decaying", "Stable selection"],
             colors=["#1f77b4", "#2ca02c", "#ff7f0e", "#2ca02c"], linestyles=["-", "-", "-", "--"],
-            density=True, scale=100.0,
+            density=density, scale=100.0,
         )
 
         # Gaussian fit to the quality-selected stable subset
@@ -102,7 +103,8 @@ def main():
             line_kwargs={
                 "color": "black",
                 "linewidth": 2.0,
-            }
+            },
+            density=density,
         )
         handles.append(fit_line)
 
