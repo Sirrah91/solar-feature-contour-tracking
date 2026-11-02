@@ -92,14 +92,14 @@ def plot_flux_in_target_region(
 
         ax1.set_xlabel(
             rf"Magnetic flux enclosed by the "
-            rf"${spec_B.quantity.latex[1:-1]} = {605}\,\mathrm{{{spec_B.quantity.unit}}}$"
+            rf"${spec_B.quantity.latex[1:-1]} = {605}\,\text{{{spec_B.quantity.unit}}}$"
             rf" contour\,({spec_flux.quantity.unit})"
         )
         ax1.set_ylabel(
             r"Median filling factor of target region"
             "\n"
-            r"for $0.5\,I^\mathrm{c}_\mathrm{QS} < I^\mathrm{c}"
-            r"\leq 0.9\,I^\mathrm{c}_\mathrm{QS}$",
+            r"for $0.5\,I^\text{c}_\text{QS} < I^\text{c}"
+            r"\leq 0.9\,I^\text{c}_\text{QS}$",
             color="red",
         )
         ax1.tick_params(axis="y", labelcolor="red")
@@ -110,8 +110,8 @@ def plot_flux_in_target_region(
         ax2.set_ylabel(
             r"Median filling factor of target region"
             "\n"
-            r"for $I^\mathrm{c} \leq 0.5\,I^\mathrm{c}_\mathrm{QS}$"
-            r" or $I^\mathrm{c} > 0.9\,I^\mathrm{c}_\mathrm{QS}$",
+            r"for $I^\text{c} \leq 0.5\,I^\text{c}_\text{QS}$"
+            r" or $I^\text{c} > 0.9\,I^\text{c}_\text{QS}$",
             color="blue",
         )
         ax2.tick_params(axis="y", labelcolor="blue")
