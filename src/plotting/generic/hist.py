@@ -29,7 +29,7 @@ def _strip_math_delimiters(value: str | None) -> str | None:
         return None
 
     if value.startswith("$"):
-        value = value[1]
+        value = value[1:]
     if value.endswith("$"):
         value = value[:-1]
 
