@@ -97,15 +97,12 @@ def main():
         # Gaussian fit to the quality-selected stable subset
         fit_line, fit_label = overlay_gaussian_fit(
             ax,
-            stable_subset,
-            bins="auto",
+            handles[-1],
             spec_quantity=spec.quantity,
             line_kwargs={
                 "color": "black",
                 "linewidth": 2.0,
             },
-            density=density,
-            scale=scale,
         )
         handles.append(fit_line)
 
